@@ -31,15 +31,15 @@ class CardsView extends Component {
     render() {
         return (
             this.state.view ?
-                <div>
+                <div className="gird"> 
                     <IconButton>
-                        <Tooltip title="List View" onClick={this.handleCardsView}>
+                        <Tooltip  title="List View" onClick={this.handleCardsView}>
                             <img src={require('../assets/gird.svg')} alt="grid icon" />
                         </Tooltip>
                     </IconButton>
                 </div>
                 :
-            <div>
+            <div className="gird ">
                     <IconButton >
                         <Tooltip title="Grid View" onClick={this.handleCardsView}>
                             <img src={require('../assets/list.svg')} alt="grid icon" />

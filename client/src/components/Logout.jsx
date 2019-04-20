@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
 import { Button } from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import { uploadProfilePic } from "../services/services";
+import { uploadProfilePic, logout } from "../services/services";
 /**
 * @description:This method is used to Logout ui.. 
 */
@@ -43,8 +43,32 @@ class Logout extends Component {
     */
     handlelogout = event => {
         event.preventDefault();
-        localStorage.clear();
-        this.props.props.props.history.push("/login");
+
+var data={
+email:localStorage.getItem('email'),
+userid:localStorage.getItem('userId')
+
+
+}
+
+
+
+  logout(data)
+        .then((result) => {
+            localStorage.clear();
+            this.props.props.props.history.push("/login");
+      
+        }).catch((err) => {
+            console.log(err);
+        })
+
+
+
+
+
+
+
+
 
     }
     /**

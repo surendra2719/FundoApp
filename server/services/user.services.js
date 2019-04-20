@@ -41,6 +41,7 @@ exports.registration = (data, callback) => {
  * Exporting login and passing the parameters as data and callback done by callback functions
  */
 exports.login = (data, callback) => {
+
     try {
         userModel.login(data, (err, result) => {
             if (err)

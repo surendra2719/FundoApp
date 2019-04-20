@@ -19,12 +19,9 @@ function userRegister(firstName, lastName, email, password) {
 /**
  * fetching login data and sending request to backend
  */
-function userLogin(email, password) {
+function userLogin(data) {
     return axios.post('/login',
-        {
-            email: email,
-            password: password
-        })
+       data)
   
 }
 /**
@@ -58,10 +55,26 @@ function uploadProfilePic(data) {
         }
     )
 }
+function logout(data) {
+    var headers = {
+        "access-token": localStorage.getItem("token")
+    }
+    return axios.post('/logout',
+        data, {
+            headers: headers
+        }
+    )
+}
+
+
+
+
+
 /**
  * exporting the all data 
  */
 export {
+    logout,
     userRegister,
     userLogin,
     forgot,

@@ -96,7 +96,13 @@ class loginScreen extends React.Component {
         event.preventDefault();
         try {
             if (formValid(this.state)) {
-                userLogin(this.state.email, this.state.password)
+             
+var data = {
+    email: this.state.email,
+    password: this.state.password,
+    userId: localStorage.getItem("userId"),
+    }
+                userLogin(data)
                     .then((res) => {
 
 
@@ -114,7 +120,6 @@ class loginScreen extends React.Component {
                                 localStorage.setItem('token', res.data);
                                 localStorage.setItem('profilePic', decoded.payload.profilePic);
                                 this.setState({ open: true, errormsg: "Login sucessfull!!!!" });
-
                                 this.props.props.history.push("/dashBoard")
 
                             }

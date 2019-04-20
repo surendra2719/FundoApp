@@ -45,5 +45,5 @@ router.post('/addLabel', Middleware.checkTokenAuthentication, noteController.add
 router.get('/getLabels', Middleware.checkTokenAuthentication, noteController.getLabels)
 router.post('/deleteLabels', Middleware.checkTokenAuthentication, noteController.deleteLabel)
 router.put('/updateLabels',  Middleware.checkTokenAuthentication, noteController.updateLabel)
-
+router.post('/logout',  Middleware.checkTokenAuthentication, userController.deleteredis)
 module.exports = router;
