@@ -1436,5 +1436,20 @@ and (max-device-width : 425px) {
   border: 1x white;
 }
 }
+.checklists{
+  margin-left: -86%;
+}
+#check{
+  display: flex;
+  flex-direction: row;
+  margin-left: 8px;
+}
 
-
+#labelsCheck{
+  display: flex;
+  flex-wrap: wrap
+}
+#checkNote{
+  display: flex;
+  flex-direction: row;
+}

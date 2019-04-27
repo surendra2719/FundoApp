@@ -25,6 +25,7 @@ import classNames from 'classnames';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import NoteDisplay from '../components/notesdisplays'
+import { askForPermissioToReceiveNotifications } from '../pusnotify';
 
 const styles = theme => ({
   menuItem: {
@@ -160,6 +161,9 @@ class dashBoardscreen extends React.Component {
       console.log("error in handle close drawer in dash board");
 
     }
+  };
+  componentWillMount = () => {
+    askForPermissioToReceiveNotifications();
   };
   // getNewNote(newCard) {
   //   this.noteToCards.current.displayNewCard(newCard);

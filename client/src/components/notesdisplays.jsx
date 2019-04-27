@@ -11,6 +11,8 @@ import DialogBox from '../components/dialogboxComponent';
 import PinAndOthers from '../components/notePin';
 import EditPin from '../components/pin';
 import SearchedNotes from './searchNotes'
+import Divider from '@material-ui/core/Divider';
+
 // import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 // import { Container, Row, Col } from 'react-grid-system'
 // import { DragDropContextProvider } from 'react-dnd'
@@ -28,6 +30,9 @@ export default class Cards extends Component {
             open1: false,
             image: "",
             label: false,
+            Checklist:[],
+
+
 
 
         }
@@ -49,10 +54,11 @@ export default class Cards extends Component {
     displayLabelledCards() {
         this.setState({ label: true })
     }
-    handleClick = (note) => {
-        this.setState({ open1: true })
-        console.log("dilog note in notedisplay==>", note);
+    async handleClick (note) {
         this.cardsToDialogBox.current.getData(note);
+     await    this.setState({ open1: true })
+        console.log("dilog note in notedisplay==>", note);
+     
     }
     closeEditBox = () => {
         this.setState({ open1: false })
@@ -88,6 +94,34 @@ export default class Cards extends Component {
                 console.log(error)
             });
     }
+    handleTickBox = (id, name) => {
+        try {
+            let newArray = this.state.notes;
+            for (let i = 0; i < newArray.length; i++) {
+                if (newArray[i].id === id) {
+                    for (let j = 0; j < newArray[i].noteCheckLists.length; j++) {
+                        if (newArray[i].noteCheckLists[j].itemName === name) {
+                            if (newArray[i].noteCheckLists[j].status === 'open') {
+                                newArray[i].noteCheckLists[j].status = 'close';
+                                this.setState({
+                                    notes: newArray
+                                })
+                            }
+                            else {
+                                newArray[i].noteCheckLists[j].status = 'open';
+                                this.setState({
+                                    notes: newArray
+                                })
+                            }
+                        }
+                    }
+                    console.log(this.state.notes);
+                }
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
     displayNewCard(newCard) {
         console.log("newCard", newCard);
 
@@ -113,7 +147,6 @@ export default class Cards extends Component {
                 console.log(error)
             });
     }
-
     getColor = (value, noteID) => {
         const color = {
             noteID: noteID,
@@ -137,7 +170,6 @@ export default class Cards extends Component {
     }
 
     deleteNote = (noteID) => {
-
         const deletedata = {
             noteID: noteID
         }
@@ -156,10 +188,7 @@ export default class Cards extends Component {
             })
             .catch((err) => {
                 console.log("delete from the backend=> error");
-
             })
-
-
     }
 
     trashNote = (noteID) => {
@@ -464,7 +493,7 @@ export default class Cards extends Component {
                 />
             )
         }
-        else {
+      else {
             let cardsView = this.props.noteProps ? "listCards" : "Cards";
 
             return (
@@ -525,8 +554,39 @@ export default class Cards extends Component {
                                                 </div>
 
                                                 <div onClick={() => this.handleClick(noteArray[key])} style={{ wordBreak: "break-word" }}>
-                                                    {noteArray[key].description}
-                                                </div>
+                                                   {noteArray[key].description}
+                                                 </div>
+                                                {/* <div onClick={() => { this.handleClick(noteArray[key]) }}>
+                                                {Object.keys(noteArray[key].noteCheckLists).map(list => (
+                                                    <div key={list}>
+                                                        {noteArray[key].noteCheckLists[list].status === 'open' ?
+                                                            <div id="checkNote">
+                                                                <div onClick={() => { this.handleTickBox(noteArray[key].id, noteArray[key].noteCheckLists[list].itemName) }}>
+                                                                    <img alt="" src={require('../assets/images/checkBoxBlank.svg')} style={{ opacity: '0.5', cursor: 'pointer', width: '20px', height: '20px' }} />
+                                                                </div>
+                                                                <div style={{ marginLeft: '5px' }}>{noteArray[key].noteCheckLists[list].itemName}</div>
+                                                            </div>
+                                                            : null
+                                                        }
+                                                    </div>
+                                                ))}
+                                                {Object.keys(noteArray[key].noteCheckLists).map(li => (
+                                                    <div key={li}>
+                                                        {noteArray[key].noteCheckLists[li].status === 'close' ?
+                                                            <div>
+                                                                <Divider />
+                                                                <div id="checkNote">
+                                                                    <div onClick={() => { this.handleTickBox(noteArray[key].id, noteArray[key].noteCheckLists[li].itemName) }}>
+                                                                        <img alt="" src={require('../assets/images/checkBoxTick.svg')} style={{ opacity: '0.5', cursor: 'pointer', width: '20px', height: '20px' }} />
+                                                                    </div>
+                                                                    <div style={{ textDecoration: 'line-through', opacity: '0.5', marginLeft: '5px' }}>{noteArray[key].noteCheckLists[li].itemName}</div>
+                                                                </div>
+                                                            </div>
+                                                            : null
+                                                        }
+                                                    </div>
+                                                ))}
+                                            </div>  */}
                                                 {noteArray[key].reminder ?
                                                     <Chip id="chipcss"
                                                         label={noteArray[key].reminder}

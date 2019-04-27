@@ -107,25 +107,25 @@ exports.updateColorController = (req, res) => {
          */
         noteID = req.body.noteID;
         color = req.body.color;
-        noteService.updateColor(noteID, color, (err, result) => {
+        noteService.updateColor(noteID, color)
+        .then((result)=>{
+            responseResult.suceses = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+
+        })
+          .catch((err)=>{
+            responseResult.suceses = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+          })
             /**
              * checking the error with if condition and sending status
              */
 
-            if (err) {
-                responseResult.suceses = false;
-                responseResult.error = err;
-                res.status(500).send(responseResult)
-            }
-            else {
-                /**
-                 * checking the result with else condition and sending status
-                 */
-                responseResult.suceses = true;
-                responseResult.result = result;
-                res.status(200).send(responseResult);
-            }
-        })
+           
+        
+     
     }
     catch (err) {
         console.log('errors in controllers', err);
@@ -656,3 +656,183 @@ exports.updateLabel = (req, res) => {
     res.send(error)
     }
 }
+exports.addchecklist = (req, res) => {
+    // console.log("in Controller",req.body);
+    try {
+      
+
+        var res_result = {};
+  
+            const checklistData = {
+                userId: req.decoded.payload.user_id,
+                noteID :req.body.noteID,
+                checklist: req.body.checklist,
+
+
+            }
+            noteService.addchecklist(checklistData, (err, result) => {
+                if (err) {
+                    res_result.status = false;
+                    res_result.error = err;
+                    res.status(500).send(res_result);
+                }
+                else {
+
+                    res_result.status = true;
+                    res_result.data = result;
+                    res.status(200).send(res_result);
+                }
+            })
+        
+    }
+    catch (error) {
+        res.send(error)
+    }
+}
+exports.getChecklist = (req, res) => {
+    try {
+      //  console.log("in Controller",req.body,req.decoded,req.decoded.id);
+        var res_result = {};
+  
+   
+            const checklistData = {
+                userId: req.decoded.payload.user_id,
+                
+
+            }
+            noteService.getChecklist(checklistData, (err, result) => {
+                if (err) {
+
+                    res_result.status = false;
+                    res_result.error = err;
+                    res.status(500).send(res_result);
+                }
+                else {
+
+                    res_result.status = true;
+                    res_result.data = result;
+                    res.status(200).send(res_result);
+                }
+            })
+        
+    }
+    catch (error) {
+        res.send(error)
+    }
+}
+exports.deletechecklist = (req, res) => {
+    try {
+        var res_result = {};
+  
+            const checklistData  = {
+                checklistID: req.body.checklistID,
+                noteID :req.body.noteID
+
+            }
+            noteService.deletechecklist(checklistData, (err, result) => {
+                if (err) {
+                res_result.status = false;
+                res_result.error = err;
+                res.status(500).send(res_result);
+                }
+                else {
+
+                    res_result.status = true;
+                    res_result.data = result;
+                    res.status(200).send(res_result);
+                }
+            })
+        
+    }
+    catch (error) {
+        res.send(error)
+    }
+}
+
+exports.updatecCheklist = (req, res) => {
+    try {
+       // console.log("in Controller",req.body);
+
+        var res_result = {};
+
+            const checklistData = {
+                noteID :req.body.noteID,
+                Checklistupdates: req.body.Checklistupdates,
+                checklistID: req.body.checklistID ,
+             
+
+            }
+            noteService.updatecCheklist(checklistData)
+         .then((result)=>{
+             res_result.status=true;
+             res_result.data=result;
+             res_result.status(500).send(res_result);
+
+         }).catch((err)=>{
+             res_result.status=false;
+             res_result.error=err;
+             res_result.status(200).send(res_result)
+         }) 
+    }
+    catch (error) {
+    res.send(error)
+    }
+}
+// saveChecklistnote
+exports.pushNotification = (req, res) => {
+    try {
+      console.log(
+        "Reqest from backend in pushNotification==================",
+        req.body
+      );
+      req
+        .checkBody("pushToken", "pushToken required")
+        .not()
+        .isEmpty();
+      var errors = req.validationErrors();
+      var response = {};
+      if (errors) {
+        response.status = false;
+        response.error = errors;
+        return res.status(422).send(response);
+      } else {
+        var responseResult = {};
+        noteService.pushNotification(req, (err, result) => {
+          if (err) {
+            responseResult.status = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult);
+          } else {
+            responseResult.status = true;
+            responseResult.data = result;
+            res.status(200).send(responseResult);
+          }
+        });
+      }
+    } catch (error) {
+      res.send(error);
+    }
+  };
+
+  exports.sendPushNotification = (req, res) => {
+    try {
+      console.log("USER ID GIVEN IS ", req.params.userid);
+  
+      var responseResult = {};
+      var user_id = req.params.userid;
+      noteService.sendPushNotification(user_id, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true; 
+          responseResult.data = "Notification sent successfully!!"
+          res.status(200).send(responseResult);
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  };
+  

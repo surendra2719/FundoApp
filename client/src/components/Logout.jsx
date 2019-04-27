@@ -10,6 +10,7 @@ import Fade from '@material-ui/core/Fade';
 import { Button } from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { uploadProfilePic, logout } from "../services/services";
+import { deletePushToken } from '../pusnotify';
 /**
 * @description:This method is used to Logout ui.. 
 */
@@ -55,6 +56,7 @@ userid:localStorage.getItem('userId')
 
   logout(data)
         .then((result) => {
+            deletePushToken();
             localStorage.clear();
             this.props.props.props.history.push("/login");
       

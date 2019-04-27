@@ -34,6 +34,7 @@ class MoreComponents extends React.Component {
             anchorEl: null,
             open: false,
             placement: null,
+            checklistopen: false,
         }
      
         this.moreOptionsToAddLabels = React.createRef();
@@ -68,6 +69,11 @@ class MoreComponents extends React.Component {
         })
         this.moreOptionsToAddLabels.current.addLabelPopup(e);
     }
+    handlaCheck=()=>{
+        this.setState({
+            checklistopen: false
+        })
+    }
     render() {
         const { anchorEl, open } = this.state;
         return (
@@ -89,6 +95,8 @@ class MoreComponents extends React.Component {
                                         <ClickAwayListener onClickAway={() => this.closeLabelPopper()}>
                                             <MenuItem id="moreOptionsMenu" onClick={this.handleTrashedNotes}>Delete Note</MenuItem>
                                             <MenuItem id="moreOptionsMenu"  onClick={this.handleLabelsOnNote} >Add Label</MenuItem>
+                                            <MenuItem id="moreOptionsMenu"  onClick={this.handlaCheck} >Show tick boxes</MenuItem>
+
                                             </ClickAwayListener>
                                         </div>
                                    

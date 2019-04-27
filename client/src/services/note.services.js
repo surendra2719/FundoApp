@@ -153,6 +153,46 @@ export function updateLabel(data) {
         data:data
     })
 }
+export function addChecklist(data) {
+    return axios.post("/addchecklists", data, {
+        headers: { 'access-token': localStorage.getItem('token') }
+
+    })
+}
+
+export function getChecklist() {
+    console.log("create note call");
+    
+    return axios.post('/getChekLists',{
+      
+        headers: {
+            "access-token": localStorage.getItem("token")
+        },
+        
+    })
+}
+
+// export function pushNotification(data) {
+//     console.log("Data from front to back ===>", data);
+//     var headers = {
+//       token: localStorage.getItem("token")
+//     };
+//     return axios.post("/pushNotification", data, {
+//       headers: headers
+//     });
+//   }
+  
+  export function pushNotification(data) {
+    console.log("create note call",data);
+    
+    return axios.post( "/pushNotification",data,{
+   
+        headers: {
+            "access-token": localStorage.getItem("token")
+        },
+      
+     } )
+}
 
 
 /*************************************************************************************************** */

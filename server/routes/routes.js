@@ -46,4 +46,15 @@ router.get('/getLabels', Middleware.checkTokenAuthentication, noteController.get
 router.post('/deleteLabels', Middleware.checkTokenAuthentication, noteController.deleteLabel)
 router.put('/updateLabels',  Middleware.checkTokenAuthentication, noteController.updateLabel)
 router.post('/logout',  Middleware.checkTokenAuthentication, userController.deleteredis)
+router.post('/addchecklists', Middleware.checkTokenAuthentication, noteController.addchecklist)
+router.put('/updateChecklists',  Middleware.checkTokenAuthentication, noteController.updatecCheklist)
+router.get('/getChekLists', Middleware.checkTokenAuthentication, noteController.getChecklist)
+router.post('/deleteChecklists', Middleware.checkTokenAuthentication, noteController.deletechecklist)
+router.post('/saveCheckliststonote',  Middleware.checkTokenAuthentication,noteController.saveChecklistnote)
+
+router.post('/pushNotification', Middleware.checkTokenAuthentication, noteController.pushNotification)
+router.get('/sendNotification/:userid', noteController.sendPushNotification),
+
+
+
 module.exports = router;

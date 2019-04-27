@@ -49,7 +49,9 @@ export default class DialogBox extends Component {
             archive: false,
             _id: "",
             reminder: "",
-            image: ""
+            image: "",
+            checkList: [],
+
         }
         this.handleTitleClick = this.handleTitleClick.bind(this);
         this.handleDescClick = this.handleDescClick.bind(this);
@@ -80,7 +82,9 @@ export default class DialogBox extends Component {
                 _id: note._id,
                 pinned: note.pinned,
                 reminder: note.reminder,
-                image: note.image
+                image: note.image,
+                checkList: note.noteCheckLists,
+
             })
         }
     }

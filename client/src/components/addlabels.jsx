@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { MenuItem, Popper, Paper, Fade, Checkbox, ClickAwayListener } from '@material-ui/core';
 import { getLabels } from '../services/note.services';
-
-
 class AddLabelsOnNote extends Component {
     constructor() {
         super();
@@ -31,7 +29,6 @@ class AddLabelsOnNote extends Component {
                 })
                 
             })
-
             .catch((error) => {
                 console.log(error)
             });

@@ -45,9 +45,16 @@ const NoteSchema = mongoose.Schema({
     label: [{
         type: String,
         ref: 'labeSchema',
-     
+
+    }],
+    checkList:[{ type:String,
+       ref: "checkListSchema" 
     }]
+
+
+
 },
+
     {
         timestamps: true
     });
@@ -87,7 +94,7 @@ noteModel.prototype.getNoteModel = (req, res) => {
 }
 
 noteModel.prototype.updateColorModel = (noteID, updateNote, res) => {
-
+    return new Promise((resolve, reject) => { 
     Note.findOneAndUpdate(
         {
             _id: noteID
@@ -99,12 +106,13 @@ noteModel.prototype.updateColorModel = (noteID, updateNote, res) => {
         }, (err, result) => {
             if (err) {
                 console.log("color not updated");
-                res(err);
+                reject(err);
             } else {
                 console.log("color updated sucessfully");
-                res(null, updateNote);
+                resolve( updateNote);
             }
         })
+    })
 }
 
 noteModel.prototype.isArchived = (noteID, archiveNote, callback) => {
@@ -440,5 +448,129 @@ noteModel.prototype.updateLabel = (changedLabel, callback) => {
             }
         });
 };
+var checkListSchema = new mongoose.Schema({
+    userID: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserSchema'
+    },
+    checklist: {
+        type: String,
+        require: [true, "checkllist require"],
+        unique: true
+    }
+}, {
+        timestamps: true
+    }
+)
+var checkList = mongoose.model('checklist', checkListSchema);
+
+noteModel.prototype.addchecklist = async (checklistData, callback) => {
+    console.log("checklist save", checklistData);
+
+    const Data = new checkList(checklistData);
+  await  Data.save((err, result) => {
+        if (err) {
+            console.log(err);
+            callback(err);
+        } else {
+            console.log("checklist result", result);
+
+            return callback(null, result);
+        }
+    })
+}
+noteModel.prototype.getChecklist = (id, callback) => {
+    //console.log("in model", id);
+
+    checkList.find({ userID: id.userID }, (err, result) => {
+        if (err) {
+            callback(err)
+        } else {
+            //console.log("labels", result)
+            return callback(null, result)
+        }
+    })
+}
+
+noteModel.prototype.deletechecklist = (id, callback) => {
+    console.log("in model", id);
+
+    checkList.deleteOne({ _id: id.checklistID }, (err, result) => {
+        if (err) {
+            callback(err)
+        } else {
+            console.log("labels", result)
+            return callback(null, result)
+        }
+    })
+}
+
+noteModel.prototype.updatecCheklist = (checklists) => {
+    var Checklistupdates = null;
+    var checklistID = null;
+
+
+    if (checklists!= null) {
+        Checklistupdates = checklists.Checklistupdates;
+        checklistID= checklists.checklistID
+    } else {
+        callback("Pinned note not found")
+    }
+    return new Promise((resolve, reject) => { 
+
+    checkList.findOneAndUpdate(
+        {
+            _id: checklistID
+        },
+        {
+            $set: {
+                checklist: Checklistupdates
+            }
+        },
+        (err, result) => {
+            if (err) {
+                console.log("in modelerr");
+                reject(err);
+
+            } else {
+                console.log("in modelsuccess");
+
+                resolve( Checklistupdates);
+
+            }
+        })
+        });
+
+}
+noteModel.prototype.getReminders = (d1, d2, callback) => {
+    // console.log("id is---------------------->", id.decoded);
+    Note.find((err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        const details = [];
+        result.forEach(function(value) {
+          if (value.reminder.length > 1) {
+            // console.log("original is "+d1+" < "+value.reminder+"==="+ (d1<value.reminder)       );
+            if (value.reminder >= d1 && value.reminder <= d2) {
+              userIdReminder = [
+                value.userId + ", " + value.title + ", " + value.description
+              ];
+              console.log("IN IF---------->", userIdReminder);
+              details.push(userIdReminder);
+            }
+          }
+        });
+        // console.log("DETAILS+++", details);
+        //  details.filter(item => item.trim() !== '')
+        if (details.length > 0) {
+          callback(null, details);
+        } else {
+          callback(null, "No reminders found");
+        }
+      }
+    });
+  };
+  
 
 module.exports = new noteModel;

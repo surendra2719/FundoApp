@@ -10,6 +10,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator')
 const router = require('./routes/routes')
+const noteServices= require("../server/services/note.service")
 // const responseTime = require('response-time')
 // const axios = require('axios');
 // const redis = require('redis');
@@ -61,6 +62,10 @@ app.listen(1995, () => {
 /**
  * exporting the app to test file
  */
+var schedule = require("node-schedule");
+var j = schedule.scheduleJob("*/1 * * * *", function() {
+    noteServices.checkForReminders();
+});
 
 
 module.exports = app;
